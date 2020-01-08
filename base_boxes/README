@@ -1,0 +1,25 @@
+
+1.  First Download VirtualBox from https://www.virtualbox.org/wiki/Downloads and install it on your Windows, MacOS or Linux machine.
+
+
+2.  Download Packer from:  https://www.packer.io/downloads.html,  unzip it, and add packer in system path.
+
+
+3.  Download OS images of RHEL/SLES/OL/Solaris to 'iso' directory.
+
+
+4.  Run the following commands to generate base boxes manually for VirtualBox:
+
+    # cd packer
+    # packer build -only=virtualbox-iso -var mirror=<iso directory> <packer_json_file>
+
+    The created base boxes for VirtualBox will be under 'builds/virtualbox' directory.
+
+
+5.  Run the following commands to generate base boxes manually for VMware if VMware Fusion or Workstation was installed:
+
+    # cd packer
+    # packer build -only=vmware-iso -var mirror=<iso directory> <packer_json_file>
+
+    The created base boxes for VMware will be under 'builds/vmware' directory.
+

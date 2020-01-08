@@ -1,0 +1,228 @@
+{
+  "variables": {
+
+    "variables": "The variables which could be specified with '-var <variable>=<value>'",
+    "mirror": "../iso",
+
+    "host_constants": "The constants for hostname, filename",
+    "hostname": "rhel6u8_only",
+    "outputfile": "rhel6u8_only.box",
+
+    "os_image_constants": "The constants for RHEL 7 OS ISO images",
+
+    "rhel8u1_iso": "rhel-8.1-x86_64-dvd.iso",
+    "rhel8u1_iso_checksum": "2323ad44d75df1a1e83048a34e196ddfedcd6c0f6c49ea59bf08095e3bb9ef65",
+    "rhel8u1_kickstart_dir": "rhel8",
+    "rhel8u1_vmware_os_type": "rhel8-64",
+
+    "rhel8u0_iso": "rhel-8.0-x86_64-dvd.iso",
+    "rhel8u0_iso_checksum": "005d4f88fff6d63b0fc01a10822380ef52570edd8834321de7be63002cc6cc43",
+    "rhel8u0_kickstart_dir": "rhel8",
+    "rhel8u0_vmware_os_type": "rhel8-64",
+
+    "rhel7u7_iso": "rhel-server-7.7-x86_64-dvd.iso",
+    "rhel7u7_iso_checksum": "88b42e934c24af65e78e09f0993e4dded128d74ec0af30b89b3cdc02ec48f028",
+    "rhel7u7_kickstart_dir": "rhel7",
+    "rhel7u7_vmware_os_type": "rhel7-64",
+
+    "rhel7u6_iso": "rhel-server-7.6-x86_64-dvd.iso",
+    "rhel7u6_iso_checksum": "60a0be5aeed1f08f2bb7599a578c89ec134b4016cd62a8604b29f15d543a469c",
+    "rhel7u6_kickstart_dir": "rhel7",
+    "rhel7u6_vmware_os_type": "rhel7-64",
+
+    "rhel7u5_iso": "rhel-server-7.5-x86_64-dvd.iso",
+    "rhel7u5_iso_checksum": "d0dd6ae5e001fb050dafefdfd871e7e648b147fb2d35f0e106e0b34a0163e8f5",
+    "rhel7u5_kickstart_dir": "rhel7",
+    "rhel7u5_vmware_os_type": "rhel7-64",
+
+    "rhel7u4_iso": "rhel-server-7.4-x86_64-dvd.iso",
+    "rhel7u4_iso_checksum": "431a58c8c0351803a608ffa56948c5a7861876f78ccbe784724dd8c987ff7000",
+    "rhel7u4_kickstart_dir": "rhel7",
+    "rhel7u4_vmware_os_type": "rhel7-64",
+
+    "rhel7u3_iso": "rhel-server-7.3-x86_64-dvd.iso",
+    "rhel7u3_iso_checksum": "120acbca7b3d55465eb9f8ef53ad7365f2997d42d4f83d7cc285bf5c71e1131f",
+    "rhel7u3_kickstart_dir": "rhel7",
+    "rhel7u3_vmware_os_type": "rhel7-64",
+
+    "rhel7u2_iso": "rhel-server-7.2-x86_64-dvd.iso",
+    "rhel7u2_iso_checksum": "03f3a0291634335f6995534d829bd21ffaa0d000004dfeb1b2fb81052d64a4d5",
+    "rhel7u2_kickstart_dir": "rhel7",
+    "rhel7u2_vmware_os_type": "rhel7-64",
+
+    "rhel7u1_iso": "rhel-server-7.1-x86_64-dvd.iso",
+    "rhel7u1_iso_checksum": "3685468ec6cdcb70dfc85ebbc164da427dc2d762644c3c2ee1520f4f661c15ce",
+    "rhel7u1_kickstart_dir": "rhel7",
+    "rhel7u1_vmware_os_type": "rhel7-64",
+
+    "rhel7_iso": "rhel-server-7.0-x86_64-dvd.iso",
+    "rhel7_iso_checksum": "85a9fedc2bf0fc825cc7817056aa00b3ea87d7e111e0cf8de77d3ba643f8646c",
+    "rhel7_kickstart_dir": "rhel7",
+    "rhel7_vmware_os_type": "rhel7-64",
+
+    "os_image_constants": "The constants for RHEL 6 OS ISO images",
+    "rhel6u9_iso": "rhel-server-6.9-x86_64-dvd.iso",
+    "rhel6u9_iso_checksum": "3f961576e9f81ea118566f73f98d7bdf3287671c35436a13787c1ffd5078cf8e",
+    "rhel6u9_kickstart_dir": "rhel6",
+    "rhel6u9_vmware_os_type": "rhel6-64",
+
+    "rhel6u8_iso": "rhel-server-6.8-x86_64-dvd.iso",
+    "rhel6u8_iso_checksum": "d35fd1af20f6adef9b11b46c2534ae8b6e18de7754889e2b51808b436dff2804",
+    "rhel6u8_kickstart_dir": "rhel6",
+    "rhel6u8_vmware_os_type": "rhel6-64",
+
+    "rhel6u7_iso": "rhel-server-6.7-x86_64-dvd.iso",
+    "rhel6u7_iso_checksum": "0e0acb2a544f4d58f10292144161f40439734c6e98b13ba8c595372b20354bc5",
+    "rhel6u7_kickstart_dir": "rhel6",
+    "rhel6u7_vmware_os_type": "rhel6-64",
+
+    "rhel6u6_iso": "rhel-server-6.6-x86_64-dvd.iso",
+    "rhel6u6_iso_checksum": "16044cb7264f4bc0150f5b6f3f66936ccf2d36e0a4152c00d9236fb7dcae5f32",
+    "rhel6u6_kickstart_dir": "rhel6",
+    "rhel6u6_vmware_os_type": "rhel6-64",
+
+    "rhel6u5_iso": "rhel-server-6.5-x86_64-dvd.iso",
+    "rhel6u5_iso_checksum": "a51b90f3dd4585781293ea08adde60eeb9cfa94670943bd99e9c07f13a259539",
+    "rhel6u5_kickstart_dir": "rhel6",
+    "rhel6u5_vmware_os_type": "rhel6-64",
+
+    "rhel6u4_iso": "rhel-server-6.4-x86_64-dvd.iso",
+    "rhel6u4_iso_checksum": "1eabfc4eb1bea0d1d6c6c2802c7d44c6e68078b678186669bd2bcb87ca2ebeb8",
+    "rhel6u4_kickstart_dir": "rhel6",
+    "rhel6u4_vmware_os_type": "rhel6-64",
+
+    "os_image_constants": "The constants for RHEL 5 OS ISO images",
+    "rhel5u11_iso": "rhel-server-5.11-x86_64-dvd.iso",
+    "rhel5u11_iso_checksum": "36565fe0c8a97207d63234d10123daeedb29d509576dbd7b34e71958ac2f9050",
+    "rhel5u11_kickstart_dir": "rhel5",
+    "rhel5u11_vmware_os_type": "rhel5-64",
+
+    "rhel5u10_iso": "rhel-server-5.10-x86_64-dvd.iso",
+    "rhel5u10_iso_checksum": "46d49d8565025cb2623c391a82668d760d0549be3727062424956bec8af8cca2",
+    "rhel5u10_kickstart_dir": "rhel5",
+    "rhel5u10_vmware_os_type": "rhel5-64",
+
+    "rhel5u9_iso": "rhel-server-5.9-x86_64-dvd.iso",
+    "rhel5u9_iso_checksum": "33df3114c997e43e8d61a18f87e5cb8561b8f84f9065199eaf642c49da46d5ad",
+    "rhel5u9_kickstart_dir": "rhel5",
+    "rhel5u9_vmware_os_type": "rhel5-64",
+
+    "base_box_constants": "The constants used to creating base boxes",
+    "swapsize": "8000",
+    "compression" : "6"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "RedHat_64",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "virtualbox_version_file": ".vbox_version",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "vboxmanage": [
+         ["modifyvm", "{{.Name}}", "--vram", "32"],
+         ["modifyvm", "{{.Name}}", "--memory", "512"],
+         ["modifyvm", "{{.Name}}", "--cpus", "1"]
+      ],
+
+      "hard_drive_interface" : "sata",
+      "disk_size": 81920,
+      
+      "headless" : 0,
+
+      "iso_url": "{{user `mirror`}}/{{user `rhel6u8_iso`}}",
+      "iso_checksum": "{{user `rhel6u8_iso_checksum`}}",
+      "iso_checksum_type": "sha256",
+
+      "http_directory": "http",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
+      "shutdown_timeout": "40m",
+
+      "boot_wait": "10s",
+      "boot_command" : [
+            "<tab>",
+            " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `rhel6u8_kickstart_dir`}}/ks.cfg ",
+            "HOSTNAME={{user `hostname`}} ",
+            "SWAPSIZE={{user `swapsize`}} ",
+            "<enter>"
+      ]
+    },
+    {
+      "type": "vmware-iso",
+      "guest_os_type": "{{user `rhel6u8_vmware_os_type`}}",
+      "tools_upload_flavor": "linux",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "480",
+        "numvcpus": "1"
+      },
+
+      "disk_size": 81920,
+      
+      "iso_url": "{{user `mirror`}}/{{user `rhel6u8_iso`}}",
+      "iso_checksum": "{{user `rhel6u8_iso_checksum`}}",
+      "iso_checksum_type": "sha256",
+
+      "http_directory": "http",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
+      "shutdown_timeout": "40m",
+
+      "boot_wait": "10s",
+      "boot_command" : [
+            "<tab>",
+            " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `rhel6u8_kickstart_dir`}}/ks.cfg ",
+            "HOSTNAME={{user `hostname`}} ",
+            "SWAPSIZE={{user `swapsize`}} ",
+            "<enter>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "BOX_OS=rhel6u8",
+        "BOX_PROD=only"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/rhel/fix-slow-dns.sh",
+        "scripts/common/sshd.sh",
+        "scripts/common/vagrant.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/products/install_products.sh",
+        "scripts/rhel/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "../builds/{{.Provider}}/{{user `outputfile`}}",
+      "compression_level": "{{user `compression`}}"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+
+1. Download RHEL OS images from Red Hat website:
+   https://idp.redhat.com/idp/
+
+   ISO image                         SHA-256 checksum
+   rhel-server-7.0-x86_64-dvd.iso    85a9fedc2bf0fc825cc7817056aa00b3ea87d7e111e0cf8de77d3ba643f8646c
+   rhel-server-6.6-x86_64-dvd.iso    16044cb7264f4bc0150f5b6f3f66936ccf2d36e0a4152c00d9236fb7dcae5f32
+   rhel-server-6.5-x86_64-dvd.iso    a51b90f3dd4585781293ea08adde60eeb9cfa94670943bd99e9c07f13a259539
+   rhel-server-6.4-x86_64-dvd.iso    1eabfc4eb1bea0d1d6c6c2802c7d44c6e68078b678186669bd2bcb87ca2ebeb8
+   
+
+2. Download Oracle Linux OS images from Oracle website:
+   https://edelivery.oracle.com/linux
+
+   ISO image                             SHA-1 checksum
+   OracleLinux-R7-U0-Server-x86_64-dvd   74BCAC408A164535ECD483503244E312A292BF84
+
+
+3. Download SLES Linux OS images from SuSE website:
+   https://www.suse.com/products/server/download/
+
+
+4. Download Solaris Linux OS images from Oracle website:
+   http://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html
+
+   ISO image                         MD5 checksum
+   sol-11_2-ai-x86.iso               2b3859bb7532cfe42214349dff9fcc23
+   sol-11_3-ai-x86.iso               30d9ae857f62938c21307722d031e0dc
+
+
+

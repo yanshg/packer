@@ -1,0 +1,63 @@
+install_type initial_install
+system_type standalone
+pool rpool 16g 2g 2g any
+cluster SUNWCrnet add
+package SUNWwgetr add
+package SUNWwgetu add
+package SUNWgss add
+package SUNWgssk add
+package SUNWgssc add
+package SUNWsshdr add
+package SUNWsshdu add
+package SUNWsshcu add
+package SUNWsshr add
+package SUNWsshu add
+package SUNWgcmn add
+package SUNWuiu8 add
+package SUNWbash add
+package SUNWarc add
+package SUNWhea add
+package SUNWlibm add
+package SUNWscpu add
+package SUNWnfsckr add
+package SUNWnfscr add
+package SUNWnfscu add
+package SUNWnfsskr add
+package SUNWnfssr add
+package SUNWnfssu add
+package SUNWbind add
+package SUNWbindr add
+package SUNWpool add
+package SUNWpoolr add
+package SUNWxcu4 add
+package SUNWxcu4t add
+package SUNWbtool add
+package SUNWbip add
+package SUNWbipr add
+package SUNWmdb add
+package SUNWmdbr add
+package SUNWluzone add
+package SUNWzoneu add
+package SUNWzoner add
+package SUNWPython add
+package SUNWPython-devel add
+package SUNWPython-share add
+package SUNWrcmdc add
+package SUNWrcmdr add
+package SUNWrcmds add
+package SUNWntpu add
+package SUNWntpr add
+package SUNWiscsir add
+package SUNWiscsiu add
+package SUNWlibm
+package SUNWlibmr
+package SUNWlibms
+package SUNWlibmsr
+package SUNWggrp
+package SUNWscpr
+package SUNWscpu
+package SUNWgcc
+package SUNWgccruntime
+package SUNWgtar
+package SUNWtoo
+package SUNWgmake

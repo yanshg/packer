@@ -1,0 +1,158 @@
+{
+  "variables": {
+
+    "README": "You must download the automated installer iso from the following page, and then place it somewhere that packer can fetch it",
+    "DOWNLOAD_SITE": "http://www.oracle.com/technetwork/server-storage/solaris10/downloads/index.html",
+
+    "variables": "The variables which could be specified with '-var <variable>=<value>'",
+    "mirror": "../iso",
+
+    "host_constants": "The constants for hostname, filename",
+    "hostname": "solaris10u10_only",
+    "outputfile": "solaris10u10_only.box",
+
+    "os_image_constants": "The constants for Solaris 11 OS ISO images",
+    "solaris10u11_iso": "sol-10-u11-ga-x86-dvd.iso",
+    "solaris10u11_iso_checksum": "aae1452bb3d56baa3dcb8866ce7e4a08",
+
+    "solaris10u10_iso": "sol-10-u10-ga-x86-dvd.iso",
+    "solaris10u10_iso_checksum": "bbab88c5cf0e5bd1cce01e0ab22aaab3",
+
+    "solaris10u9_iso": "sol-10-u9-ga-x86-dvd.iso",
+    "solaris10u9_iso_checksum": "c96bb1fb33081231c72c93add331e338",
+
+    "base_box_constants": "The constants used to creating base boxes",
+    "compression" : "6"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "Solaris_64",
+      "guest_additions_mode": "upload",
+      "virtualbox_version_file": ".vbox_version",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "floppy_files": [
+        "http/solaris10/sysidcfg",
+        "http/solaris10/awesome_prof",
+        "http/solaris10/rules.ok",
+        "http/solaris10/S99startup.sh",
+        "http/solaris10/finish.sh"
+      ],
+
+      "vboxmanage": [
+         ["modifyvm", "{{.Name}}", "--vram", "32"],
+         ["modifyvm", "{{.Name}}", "--memory", "2048"],
+         ["modifyvm", "{{.Name}}", "--cpus", "1"]
+      ],
+
+      "hard_drive_interface" : "sata",
+      "disk_size": 40960,
+      
+      "headless" : 0,
+
+      "iso_url": "{{user `mirror`}}/{{user `solaris10u10_iso`}}",
+      "iso_checksum": "{{user `solaris10u10_iso_checksum`}}",
+      "iso_checksum_type": "md5",
+
+      "http_directory": "http/solaris10",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "50000s",
+      
+      "shutdown_command": "/usr/local/bin/sudo /usr/sbin/init 5",
+      "shutdown_timeout": "10m",
+
+      "boot_wait": "5s",
+      "boot_command" : [
+        "e",
+        "e",
+        "<left><left><left><left><left><left><left><left><left><left>",
+        "<left><left><left><left><left><left><left><left><left><left>",
+        "<left><left><left>",
+        " - install<enter>",
+        "b"
+      ]
+    },
+    {
+      "type": "vmware-iso",
+      "guest_os_type": "solaris10-64",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "floppy_files": [
+        "http/solaris10/sysidcfg",
+        "http/solaris10/awesome_prof",
+        "http/solaris10/rules.ok",
+        "http/solaris10/S99startup.sh",
+        "http/solaris10/finish.sh"
+      ],
+
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "2048",
+        "numvcpus": "1"
+      },
+
+      "disk_size": 40960,
+      
+      "iso_url": "{{user `mirror`}}/{{user `solaris10u10_iso`}}",
+      "iso_checksum": "{{user `solaris10u10_iso_checksum`}}",
+      "iso_checksum_type": "md5",
+
+      "tools_upload_flavor": "solaris",
+      "tools_upload_path": "/home/vagrant/solaris.iso",
+
+      "http_directory": "http/solaris10",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "50000s",
+      
+      "shutdown_command": "/usr/local/bin/sudo /usr/sbin/init 5",
+      "shutdown_timeout": "10m",
+
+      "boot_wait": "5s",
+      "boot_command" : [
+        "e",
+        "e",
+        "<left><left><left><left><left><left><left><left><left><left>",
+        "<left><left><left><left><left><left><left><left><left><left>",
+        "<left><left><left>",
+        " - install<enter>",
+        "b"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "BOX_OS=solaris10u10",
+        "BOX_PROD=only"
+      ],
+      "execute_command": "/usr/local/bin/sudo {{.Path}}",
+      "scripts": [
+        "scripts/solaris10/vmtools.sh",
+        "scripts/solaris10/minimize.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "../builds/{{.Provider}}/{{user `outputfile`}}",
+      "compression_level": "{{user `compression`}}"
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "variables": {
+
+    "variables": "The variables which could be specified with '-var <variable>=<value>'",
+    "mirror": "../iso",
+
+    "host_constants": "The constants for hostname, filename",
+    "hostname": "_OS___PROD_",
+    "outputfile": "_OS___PROD_.box",
+
+    "os_image_constants": "The constants for SLES 12 OS ISO images",
+    "sles15sp1_iso": "SLE-15-SP1-Installer-DVD-x86_64-GM-DVD1.iso",
+    "sles15sp1_iso_checksum": "f61a98405b233c62f5b8d48ac6c611d4",
+    "sles15sp1_iso_checksum_type": "md5",
+    "sles15sp1_packages_iso": "SLE-15-SP1-Packages-x86_64-GM-DVD1.iso",
+    "sles15sp1_autoinst_xml_file": "sles15/sles-15-sp1-x86_64-autoinst.xml",
+    "sles15sp1_vmware_os_type": "sles11-64",
+
+    "sles15_iso": "SLE-15-Installer-DVD-x86_64-GM-DVD1.iso",
+    "sles15_iso_checksum": "659860332876d1a0e1a7216d6a93ab4b",
+    "sles15_iso_checksum_type": "md5",
+    "sles15_packages_iso": "SLE-15-Packages-x86_64-GM-DVD1.iso",
+    "sles15_autoinst_xml_file": "sles15/sles-15-x86_64-autoinst.xml",
+    "sles15_vmware_os_type": "sles11-64",
+
+    "sles12_iso": "SLE-12-Server-DVD-x86_64-GM-DVD1.iso",
+    "sles12_iso_checksum": "58086fca0441b1d44c7a51c5ee64e1bd4365466fcee48ec92c4f39d07739aeed",
+    "sles12_iso_checksum_type": "sha256",
+    "sles12_autoinst_xml_file": "sles12/sles-12-x86_64-autoinst.xml",
+    "sles12_vmware_os_type": "sles11-64",
+
+    "sles12sp1_iso": "SLE-12-SP1-Server-DVD-x86_64-GM-DVD1.iso",
+    "sles12sp1_iso_checksum": "21ca19898f20866272b8656df82a945e",
+    "sles12sp1_iso_checksum_type": "md5",
+    "sles12sp1_autoinst_xml_file": "sles12/sles-12-sp1-x86_64-autoinst.xml",
+    "sles12sp1_vmware_os_type": "sles11-64",
+
+    "os_image_constants": "The constants for SLES 11 OS ISO images",
+    "sles11sp4_iso": "SLES-11-SP4-DVD-x86_64-GM-DVD1.iso",
+    "sles11sp4_iso_checksum": "c5d2148c2b66ac3ca211484cf2167fab",
+    "sles11sp4_iso_checksum_type": "md5",
+    "sles11sp4_autoinst_xml_file": "sles11/sles-11-sp4-x86_64-autoinst.xml",
+    "sles11sp4_vmware_os_type": "sles11-64",
+
+    "sles11sp3_iso": "SLES-11-SP3-DVD-x86_64-GM-DVD1.iso",
+    "sles11sp3_iso_checksum": "480b70d50cbb538382dc2b9325221e1b",
+    "sles11sp3_iso_checksum_type": "md5",
+    "sles11sp3_autoinst_xml_file": "sles11/sles-11-sp3-x86_64-autoinst.xml",
+    "sles11sp3_vmware_os_type": "sles11-64",
+
+    "sles11sp2_iso": "SLES-11-SP2-DVD-x86_64-GM-DVD1.iso",
+    "sles11sp2_iso_checksum": "461d82ae6e15062b0807c1338f040497",
+    "sles11sp2_iso_checksum_type": "md5",
+    "sles11sp2_autoinst_xml_file": "sles11/sles-11-sp2-x86_64-autoinst.xml",
+    "sles11sp2_vmware_os_type": "sles11-64",
+
+    "sles11sp1_iso": "SLES-11-SP1-DVD-x86_64-GM-DVD1.iso",
+    "sles11sp1_iso_checksum": "d2e10420f3689faa49a004b60fb396b7",
+    "sles11sp1_iso_checksum_type": "md5",
+    "sles11sp1_autoinst_xml_file": "sles11/sles-11-sp1-x86_64-autoinst.xml",
+    "sles11sp1_vmware_os_type": "sles11-64",
+
+    "base_box_constants": "The constants used to creating base boxes",
+    "compression" : "6"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "OpenSUSE_64",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "virtualbox_version_file": ".vbox_version",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "vboxmanage": [
+         ["modifyvm", "{{.Name}}", "--vram", "32"],
+         ["modifyvm", "{{.Name}}", "--memory", "512"],
+         ["modifyvm", "{{.Name}}", "--cpus", "1"],
+         ["storageattach", "{{.Name}}", "--storagectl", "SATA Controller", "--port", "1", "--device", "0", "--type", "dvddrive", "--medium", "{{user `mirror`}}/{{user `_OS__packages_iso`}}" ]
+      ],
+
+      "hard_drive_interface" : "sata",
+      "disk_size": 40960,
+      
+      "headless" : 0,
+
+      "iso_url": "{{user `mirror`}}/{{user `_OS__iso`}}",
+      "iso_checksum": "{{user `_OS__iso_checksum`}}",
+      "iso_checksum_type": "{{user `_OS__iso_checksum_type`}}",
+
+      "http_directory": "http",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
+      "shutdown_timeout": "40m",
+
+      "boot_wait": "10s",
+      "boot_command": [
+        "<esc><enter><wait>",
+        "linux netdevice=eth0 netsetup=dhcp install=cd:/<wait>",
+        " lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `_OS__autoinst_xml_file`}}<wait>",
+        " textmode=1<wait>",
+        "<enter><wait>"
+      ]
+    },
+    {
+      "type": "vmware-iso",
+      "guest_os_type": "{{user `_OS__vmware_os_type`}}",
+      "tools_upload_flavor": "linux",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "480",
+        "numvcpus": "1"
+      },
+
+      "disk_size": 40960,
+      
+      "iso_url": "{{user `mirror`}}/{{user `_OS__iso`}}",
+      "iso_checksum": "{{user `_OS__iso_checksum`}}",
+      "iso_checksum_type": "{{user `_OS__iso_checksum_type`}}",
+
+      "http_directory": "http",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
+      "shutdown_timeout": "40m",
+
+      "boot_wait": "10s",
+      "boot_command": [
+        "<esc><enter><wait>",
+        "linux netdevice=eth0 netsetup=dhcp install=cd:/<wait>",
+        " lang=en_US autoyast=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `_OS__autoinst_xml_file`}}<wait>",
+        " textmode=1<wait>",
+        "<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "BOX_OS=_OS_",
+        "BOX_PROD=_PROD_",
+        "BOX_HOSTNAME=_OS__PROD_"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/common/sshd.sh",
+        "scripts/common/vagrant.sh",
+        "scripts/sles/unsupported-modules.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/sles/sudoers.sh",
+        "scripts/products/install_products.sh",
+        "scripts/sles/zypper-locks.sh",
+        "scripts/sles/remove-dvd-source.sh",
+        "scripts/sles/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "../builds/{{.Provider}}/{{user `outputfile`}}",
+      "compression_level": "{{user `compression`}}"
+    }
+  ]
+}

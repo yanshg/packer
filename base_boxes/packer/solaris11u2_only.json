@@ -1,0 +1,174 @@
+{
+  "variables": {
+
+    "README": "You must download the automated installer iso from the following page, and then place it somewhere that packer can fetch it",
+    "DOWNLOAD_SITE": "http://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html",
+
+    "variables": "The variables which could be specified with '-var <variable>=<value>'",
+    "mirror": "../iso",
+
+    "host_constants": "The constants for hostname, filename",
+    "hostname": "solaris11u2_only",
+    "outputfile": "solaris11u2_only.box",
+
+    "os_image_constants": "The constants for Solaris 11 OS ISO images",
+    "solaris11u3_iso": "sol-11_3-ai-x86.iso",
+    "solaris11u3_iso_checksum": "30d9ae857f62938c21307722d031e0dc",
+
+    "solaris11u2_iso": "sol-11_2-ai-x86.iso",
+    "solaris11u2_iso_checksum": "2b3859bb7532cfe42214349dff9fcc23",
+
+    "base_box_constants": "The constants used to creating base boxes",
+    "compression" : "6"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "Solaris11_64",
+      "guest_additions_mode": "attach",
+      "virtualbox_version_file": ".vbox_version",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "vboxmanage": [
+         ["modifyvm", "{{.Name}}", "--vram", "32"],
+         ["modifyvm", "{{.Name}}", "--memory", "2048"],
+         ["modifyvm", "{{.Name}}", "--cpus", "1"]
+      ],
+
+      "hard_drive_interface" : "sata",
+      "disk_size": 40960,
+      
+      "headless" : 0,
+
+      "iso_url": "{{user `mirror`}}/{{user `solaris11u2_iso`}}",
+      "iso_checksum": "{{user `solaris11u2_iso_checksum`}}",
+      "iso_checksum_type": "md5",
+
+      "http_directory": "http/solaris11",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      
+      "shutdown_command": "echo 'vagrant' | sudo -i init 5",
+      "shutdown_timeout": "10m",
+
+      "boot_wait": "5s",
+      "boot_command" : [
+        "e<wait>",
+        "<down><down><down><down><down><wait>",
+        "<end><wait>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><wait>",
+        "false<wait>",
+        "<f10><wait>",
+        "<wait10><wait10><wait10><wait10><wait10><wait10>",
+        "<wait10><wait10><wait10><wait10><wait10><wait10>",
+        "<wait10><wait10><wait10><wait10><wait10><wait10>",
+        "root<enter><wait><wait>",
+        "solaris<enter><wait><wait>",
+        "<wait10>",
+        "while (true); do sleep 5; test -f /a/etc/sudoers && grep -v \"vagrant\" \"/a/etc/sudoers\" 2> /dev/null<wait>",
+        " && echo \"vagrant ALL=(ALL) NOPASSWD: ALL\" >> /a/etc/sudoers && break ; done &<enter><wait>",
+        "<enter>while (true); do grep \"You may wish to reboot\" \"/var/svc/log/application-auto-installer:default.log\" 2> /dev/null<wait>",
+        " && reboot; sleep 10; done &<enter><wait>",
+        "sleep 5; curl http://{{ .HTTPIP }}:{{ .HTTPPort }}/default.xml -o default.xml;<wait>",
+        "curl http://{{ .HTTPIP }}:{{ .HTTPPort }}/profile.xml -o profile.xml;<wait>",
+        "cp default.xml /system/volatile/ai.xml;<wait>",
+        "mkdir /system/volatile/profile;<wait>",
+        "cp profile.xml /system/volatile/profile/profile.xml;<wait>",
+        "svcadm enable svc:/application/auto-installer:default;<wait>",
+        "<enter><wait10><wait><wait>",
+        "<enter><wait>",
+        "tail -f /var/svc/log/application-auto-installer\\:default.log<enter><wait>"
+      ]
+    },
+    {
+      "type": "vmware-iso",
+      "guest_os_type": "solaris11-64",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "2048",
+        "numvcpus": "1"
+      },
+
+      "disk_size": 40960,
+      
+      "iso_url": "{{user `mirror`}}/{{user `solaris11u2_iso`}}",
+      "iso_checksum": "{{user `solaris11u2_iso_checksum`}}",
+      "iso_checksum_type": "md5",
+
+      "http_directory": "http/solaris11",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      
+      "shutdown_command": "echo 'vagrant' | sudo -i init 5",
+      "shutdown_timeout": "10m",
+
+      "boot_wait": "5s",
+      "boot_command" : [
+        "e<wait>",
+        "<down><down><down><down><down><wait>",
+        "<end><wait>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><wait>",
+        "false<wait>",
+        "<f10><wait>",
+        "<wait10><wait10><wait10><wait10><wait10><wait10>",
+        "<wait10><wait10><wait10><wait10><wait10><wait10>",
+        "<wait10><wait10><wait10><wait10><wait10><wait10>",
+        "root<enter><wait><wait>",
+        "solaris<enter><wait><wait>",
+        "<wait10>",
+        "while (true); do sleep 5; test -f /a/etc/sudoers && grep -v \"vagrant\" \"/a/etc/sudoers\" 2> /dev/null<wait>",
+        " && echo \"vagrant ALL=(ALL) NOPASSWD: ALL\" >> /a/etc/sudoers && break ; done &<enter><wait>",
+        "<enter>while (true); do grep \"You may wish to reboot\" \"/var/svc/log/application-auto-installer:default.log\" 2> /dev/null<wait>",
+        " && reboot; sleep 10; done &<enter><wait>",
+        "sleep 5; curl http://{{ .HTTPIP }}:{{ .HTTPPort }}/default.xml -o default.xml;<wait>",
+        "curl http://{{ .HTTPIP }}:{{ .HTTPPort }}/profile.xml -o profile.xml;<wait>",
+        "cp default.xml /system/volatile/ai.xml;<wait>",
+        "mkdir /system/volatile/profile;<wait>",
+        "cp profile.xml /system/volatile/profile/profile.xml;<wait>",
+        "svcadm enable svc:/application/auto-installer:default;<wait>",
+        "<enter><wait10><wait><wait>",
+        "<enter><wait>",
+        "tail -f /var/svc/log/application-auto-installer\\:default.log<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "BOX_OS=solaris11u2",
+        "BOX_PROD=only"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/solaris11/update.sh",
+        "scripts/solaris11/vmtools.sh",
+        "scripts/common/vagrant.sh",
+        "scripts/solaris11/minimize.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "../builds/{{.Provider}}/{{user `outputfile`}}",
+      "compression_level": "{{user `compression`}}"
+    }
+  ]
+}

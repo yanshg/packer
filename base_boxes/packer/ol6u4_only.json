@@ -1,0 +1,159 @@
+{
+  "variables": {
+
+    "variables": "The variables which could be specified with '-var <variable>=<value>'",
+    "mirror": "../iso",
+
+    "host_constants": "The constants for hostname, filename",
+    "hostname": "ol6u4_only",
+    "outputfile": "ol6u4_only.box",
+
+    "os_image_constants": "The constants for Oracle Linux 7 OS ISO images",
+    "ol7u2_iso": "OracleLinux-R7-U2-Server-x86_64-dvd.iso",
+    "ol7u2_iso_checksum": "03e048f23d798c8e8e7935fab76245c2f1341378",
+    "ol7u2_kickstart_dir": "rhel7",
+
+    "ol7u1_iso": "OracleLinux-R7-U1-Server-x86_64-dvd.iso",
+    "ol7u1_iso_checksum": "FA9666448E8A24AD6A4C7203575B66532FA833D7",
+    "ol7u1_kickstart_dir": "rhel7",
+
+    "ol7_iso": "OracleLinux-R7-U0-Server-x86_64-dvd.iso",
+    "ol7_iso_checksum": "74BCAC408A164535ECD483503244E312A292BF84",
+    "ol7_kickstart_dir": "rhel7",
+
+    "os_image_constants": "The constants for Oracle Linux 6 OS ISO images",
+    "ol6u7_iso": "OracleLinux-R6-U7-Server-x86_64-dvd.iso",
+    "ol6u7_iso_checksum": "DD7231B378F23E2E846AC78B0C5D8974A23631D5",
+    "ol6u7_kickstart_dir": "rhel6",
+
+    "ol6u6_iso": "OracleLinux-R6-U6-Server-x86_64-dvd.iso",
+    "ol6u6_iso_checksum": "5738F10A506D3630EDFD297EF179B553091C6A48",
+    "ol6u6_kickstart_dir": "rhel6",
+
+    "ol6u5_iso": "OracleLinux-R6-U5-Server-x86_64-dvd.iso",
+    "ol6u5_iso_checksum": "A65041FBE0BA67E3FF6F5F93804A8F47D5B5F132",
+    "ol6u5_kickstart_dir": "rhel6",
+
+    "ol6u4_iso": "OracleLinux-R6-U4-Server-x86_64-dvd.iso",
+    "ol6u4_iso_checksum": "4ECB72ADE0186AFE2F95FFC8273FC146E177E2F9",
+    "ol6u4_kickstart_dir": "rhel6",
+
+    "base_box_constants": "The constants used to creating base boxes",
+    "swapsize": "8000",
+    "compression" : "6"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "Oracle_64",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "virtualbox_version_file": ".vbox_version",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "vboxmanage": [
+         ["modifyvm", "{{.Name}}", "--vram", "32"],
+         ["modifyvm", "{{.Name}}", "--memory", "512"],
+         ["modifyvm", "{{.Name}}", "--cpus", "1"]
+      ],
+
+      "hard_drive_interface" : "sata",
+      "disk_size": 40960,
+      
+      "headless" : 0,
+
+      "iso_url": "{{user `mirror`}}/{{user `ol6u4_iso`}}",
+      "iso_checksum": "{{user `ol6u4_iso_checksum`}}",
+      "iso_checksum_type": "sha1",
+
+      "http_directory": "http",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
+      "shutdown_timeout": "40m",
+
+      "boot_wait": "10s",
+      "boot_command" : [
+            "<tab>",
+            " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ol6u4_kickstart_dir`}}/ks.cfg ",
+            "HOSTNAME={{user `hostname`}} ",
+            "SWAPSIZE={{user `swapsize`}} ",
+            "<enter>"
+      ]
+    },
+    {
+      "type": "vmware-iso",
+      "guest_os_type": "oraclelinux-64",
+      "tools_upload_flavor": "linux",
+
+      "vm_name": "{{user `hostname`}}",
+      "output_directory": "output-{{user `hostname`}}",
+
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "480",
+        "numvcpus": "1"
+      },
+
+      "disk_size": 40960,
+      
+      "iso_url": "{{user `mirror`}}/{{user `ol6u4_iso`}}",
+      "iso_checksum": "{{user `ol6u4_iso_checksum`}}",
+      "iso_checksum_type": "sha1",
+
+      "http_directory": "http",
+      "http_port_min" : 18080,
+      "http_port_max" : 18099,
+
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p",
+      "shutdown_timeout": "40m",
+
+      "boot_wait": "10s",
+      "boot_command" : [
+            "<tab>",
+            " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ol6u4_kickstart_dir`}}/ks.cfg ",
+            "HOSTNAME={{user `hostname`}} ",
+            "SWAPSIZE={{user `swapsize`}} ",
+            "<enter>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "BOX_OS=ol6u4",
+        "BOX_PROD=only"
+      ],
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/rhel/fix-slow-dns.sh",
+        "scripts/common/sshd.sh",
+        "scripts/common/vagrant.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/products/install_products.sh",
+        "scripts/rhel/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "../builds/{{.Provider}}/{{user `outputfile`}}",
+      "compression_level": "{{user `compression`}}"
+    }
+  ]
+}

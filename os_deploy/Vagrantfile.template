@@ -1,0 +1,106 @@
+## -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+#define number of SFRAC cluster nodes
+cluster_node_num        = 2
+
+#define number of CPU for each cluster node
+cluster_node_cpu_num    = 4
+
+#define memory size for each cluster node in MBytes
+cluster_node_memory_size = 8192
+
+#define number of local disks for each node
+cluster_node_disk_num    = 5
+
+#define size for each local disk in MBytes
+cluster_node_disk_size = 1024
+
+
+$generate_utilies_script = <<'GENERATE_UTILITIES_SCRIPT_EOF'
+#!/bin/bash
+
+echo "Overwriting /etc/hosts"
+
+cat > /etc/hosts << 'HOSTS_EOF'
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost6 localhost6.localdomain6
+
+192.168.40.10 rhel7u7-n1
+192.168.40.11 rhel7u7-n2
+192.168.40.12 rhel7u7-n3
+192.168.40.13 rhel7u7-n4
+HOSTS_EOF
+
+exit 0
+
+GENERATE_UTILITIES_SCRIPT_EOF
+
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    ## IMPORTANT
+    ## vagrant work up to down, high node goes first
+    ## so when node 1 is ready, we can configure rhel7u7 and all nodes will be up
+
+    ## Setup virtual machines
+    (1..cluster_node_num).each do |i|
+
+        # this is to start machines higher to lower
+        i = cluster_node_num + 1 - i
+
+        config.vm.define vm_name = "rhel7u7-n%01d" % i do |node|
+            puts " "
+            node.vm.hostname = "#{vm_name}"
+
+            lanip = "192.168.40.#{i-1+10}"
+            puts vm_name + " eth1 lanip:" + lanip
+
+            displayname = vm_name + "_" + lanip + "_" + Time.now.strftime("%y%m%d%H%M")
+
+            box_name = "rhel7u7_only"
+            node.vm.box = "#{box_name}"
+
+            node.vm.provider :virtualbox do |vb, override|
+                #vb.gui = true
+
+                override.vm.box_url = [ "file://../../base_boxes/builds/virtualbox/#{box_name}.box",
+                                        "https://app.vagrantup.com/boxes/virtualbox/#{box_name}.box"
+                ]
+
+                vb.name = displayname
+
+                vb.customize ["modifyvm", :id, "--memory", cluster_node_memory_size]
+                vb.customize ["modifyvm", :id, "--cpus",   cluster_node_cpu_num]
+                vb.customize ["modifyvm", :id, "--macaddress1", "auto"]
+                vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+                vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+                vb.customize ["modifyvm", :id, "--groups", "/VA_rhel7u7"]
+                if /darwin/ !~ RUBY_PLATFORM
+                    # VirtuaBbox do not support pagefusion on MacOS
+                    vb.customize ["modifyvm", :id, "--pagefusion", "on"]
+                end
+
+                # Create additional harddisks
+                (1..cluster_node_disk_num).each do |j|
+                    vb.customize ['createhd', '--filename', vm_name + "_disk#{j}", '--size', cluster_node_disk_size, '--format', 'VMDK']
+                    vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', j, '--device', 0, '--type', 'hdd', '--medium', vm_name + "_disk#{j}.vmdk"]
+                end
+
+            end
+
+            node.vm.network :private_network, ip: lanip
+            node.vm.network :private_network, ip: lanip, auto_config: false
+            node.vm.network :private_network, ip: lanip, auto_config: false
+            node.vm.network :public_network, ip: lanip, auto_config: false
+            node.vm.network :public_network, ip: lanip, auto_config: false
+
+
+            # run some scripts
+            node.vm.provision :shell, :inline => $generate_utilies_script
+        end
+    end
+end
